@@ -6,18 +6,18 @@ id = []
 standon = []
 exp = 0
 lvl = 1
+max_hp = 10
 hp = 10
 weapon = "dagger"
 weapon_damage = 2
 armor = "Nothing"
 armor_defense = 0
 extra_slot = "Nothing"
+board_dict = {}
 
-def roll_dice(num_dice, num_sides):
-    rolls = []
-    for _ in range(num_dice):
-        rolls.append(random.randint(1, num_sides))
-    return rolls
+def roll(num_sides):
+    roll = random.randint(1, num_sides)
+    return roll
 
 def create_square(x_coord, y_coord, identifier):
     x.append(x_coord)
@@ -38,7 +38,6 @@ def show_board():
 
 def move(dx, dy):
     k = id.index("x")
-    board_dict = {}
     for n in range(len(id)):
         board_dict[(x[n], y[n])] = id[n]
     if board_dict.get((x[k]+dx, y[k]+dy), " ") == "□":
@@ -50,8 +49,64 @@ def move(dx, dy):
             standon[k] = True
         action_taken = True
 
+def place_object(identifier):
+    k = id.index("x")
+    for n in range(len(id)):
+        board_dict[(x[n], y[n])] = id[n]
+    while True:
+        n = roll(4)
+        if n == 1 and board_dict.get((x[k]-1, y[k]), " ") == " ":
+            create_square(x[k]-1, y[k], identifier)
+            return
+        elif n == 2 and board_dict.get((x[k]+1, y[k]), " ") == " ":
+            create_square(x[k]+1, y[k], identifier)
+            return
+        elif n == 3 and board_dict.get((x[k], y[k]-1), " ") == " ":
+            create_square(x[k], y[k]-1, identifier)
+            return
+        elif n == 4 and board_dict.get((x[k], y[k]+1), " ") == " ":
+            create_square(x[k], y[k]+1, identifier)
+            return
+
 def gen():
-    a = 0
+    k = id.index("x")
+    for f in range(len(id)):
+        board_dict[(x[f], y[f])] = id[f]
+    if board_dict.get((x[k]-1, y[k]), " ") != " " and board_dict.get((x[k]+1, y[k]), " ") != " " and board_dict.get((x[k], y[k]-1), " ") != " " and board_dict.get((x[k], y[k]+1), " ") != " ":
+        return
+    n = roll(30)
+    if n <= 20:
+        place_object("□")
+    elif n <= 22:
+        place_object("□")
+        if board_dict.get((x[k]-1, y[k]), " ") != " " and board_dict.get((x[k]+1, y[k]), " ") != " " and board_dict.get((x[k], y[k]-1), " ") != " " and board_dict.get((x[k], y[k]+1), " ") != " ":
+            return
+        place_object("□")
+    elif lvl == 1:
+        if n <= 25:
+            place_object("S")
+        elif n <= 28:
+            place_object("K")
+        else:
+            place_object("C")
+    elif lvl == 2:
+        if n <= 24:
+            place_object("K")
+        elif n <= 26:
+            place_object("L")
+        elif n <= 28:
+            place_object("F")
+        else:
+            place_object("C")
+    elif lvl >= 3:
+        if n <= 24:
+            place_object("F")
+        elif n <= 26:
+            place_object("O")
+        elif n <= 28:
+            place_object("T")
+        else:
+            place_object("C")
 
 x.append(0)
 y.append(0)
@@ -65,7 +120,11 @@ print ("Squares you can stand on are marked with '□'.")
 print ("After we ask you for your action you can type w a s or d to move.")
 print ("Or you can type ww aa ss or dd to attack in that direction.")
 print ("you can also type i to see your inventory and statts.")
+print ("You can type m to see every monster that you can currently fight.")
+print ("You can type quit to end the game.")
+print ("if you want the instructions again type h.")
 print ("Later you may get more options.")
+print ("You can open chests by attacking them.")
 print ("Good luck!")
 
 while True:
@@ -76,7 +135,7 @@ while True:
     print("choose an action: ")
     action = input()
     if action == "i":
-        print(f"HP: {hp}, EXP: {exp}, Level: {lvl}, Exp to next level: {lvl * 10- exp}")
+        print(f"HP: {hp}/{max_hp}, EXP: {exp}, Level: {lvl}, Exp to next level: {lvl * 10- exp}")
         print(f"Weapon: {weapon} (Damage: 1d{weapon_damage})")
         print(f"Armor: {armor} (Defense: {armor_defense})")
         print(f"Extra Slot: {extra_slot}")
@@ -91,9 +150,29 @@ while True:
         move(0, -1)
     elif action == "s":
         move(0, 1)
-
-            
-
-        
+    elif action == "h":
+        print ("You are 'x'.")
+        print ("Squares you can stand on are marked with '□'.")
+        print ("After we ask you for your action you can type w a s or d to move.")
+        print ("Or you can type ww aa ss or dd to attack in that direction.")
+        print ("you can also type i to see your inventory and statts.")
+        print ("You can type m to see every monster that you can currently fight.")
+        print ("You can type quit to end the game.")
+        print ("if you want the instructions again type h.")
+        print ("Later you may get more options.")
+        print ("You can open chests by attacking them.")
+        print ("Good luck!")
+    elif action == "m":
+        print("level 1 monsters:")
+        print("K - Kobold (HP: 4, Damage: 1d2)")
+        print("S - slime (HP: 2, Damage: 1d3) slimes can't move")
+        if lvl >= 2:
+            print("level 2 monsters:")
+            print("L - Lizardman (HP: 10, Damage: 1d3)")
+            print("F - Freakish Abberation (HP: 6, Damage: 1d6)")
+            if lvl >= 3:
+                print("level 3 monsters:")
+                print("O - Orc (HP: 16, Damage: 1d4)")
+                print("T - Troll (HP: 20, Damage: 1d8)")
 
 # print ("GAME OVER")
