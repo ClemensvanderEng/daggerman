@@ -299,7 +299,10 @@ def attack(dx, dy):
                 action_taken = True
                 print(f"You attack the {id[n]}!")
                 monster_index = MplaceID.index(n)
-                attack_roll = roll(weapon_damage) + extra_damage
+                attack_roll = roll(weapon_damage) + extra_damage - Mdefense[monster_index]
+                if attack_roll <= 0:
+                    print("Your attack did no damage!")
+                    return
                 print(f"You deal {attack_roll} damage!")
                 Mhp[monster_index] -= attack_roll
                 if Mhp[monster_index] <= 0:
@@ -317,6 +320,7 @@ def attack(dx, dy):
                     Mid.pop(monster_index)
                     MplaceID.pop(monster_index)
                     if exp >= lvl * 10:
+                        exp -= lvl * 10
                         lvl += 1
                         print(f"You leveled up! You are now level {lvl}!")
                         max_hp += 5
