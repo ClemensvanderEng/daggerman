@@ -1,8 +1,9 @@
 import random
 import map
+import gen as g
 
+# Player stats
 exp = 0
-lvl = 1
 max_hp = 10
 hp = 10
 weapon = "dagger"
@@ -24,12 +25,6 @@ def board_dict_update():
     for n in range (len(map.id)):
         board_dict[(map.x[n], map.y[n])] = map.id[n]
 
-def create_square(x_coord, y_coord, identifier):
-    map.x.append(x_coord)
-    map.y.append(y_coord)
-    map.id.append(identifier)
-    map.standon.append(False)
-
 def show_board():
     k = map.id.index("x")
     board_dict_update()
@@ -47,9 +42,14 @@ def move(dx, dy):
         map.id[k] = "□"
         map.id[next(i for i, (xx, yy) in enumerate(zip(map.x, map.y)) if xx == map.x[k]+dx and yy == map.y[k]+dy)] = "x"
         k = map.id.index("x")
-        if map.standon[k] == False:
-            gen()
-            map.standon[k] = True
+        if map.genID[k] == 1:
+            g.gen(1)
+        if map.genID[k] == 2:
+            g.gen(2)
+        if map.genID[k] == 3:
+            g.gen(3)
+        if map.genID[k] == 4:
+            g.gen(4)
         action_taken = True
 
 def move_object(dx,dy):
@@ -61,118 +61,13 @@ def move_object(dx,dy):
         map.MplaceID[m] = next(i for i, (xx, yy) in enumerate(zip(map.x, map.y)) if xx == map.x[map.MplaceID[m]]+dx and yy == map.y[map.MplaceID[m]]+dy)  
         return True  
 
-def place_object(identifier):
-    k = map.id.index("x")
-    board_dict_update()
-    while True:
-        n = roll(4)
-        if n == 1 and board_dict.get((map.x[k]-1, map.y[k]), " ") == " ":
-            create_square(map.x[k]-1, map.y[k], identifier)
-            return
-        elif n == 2 and board_dict.get((map.x[k]+1, map.y[k]), " ") == " ":
-            create_square(map.x[k]+1, map.y[k], identifier)
-            return
-        elif n == 3 and board_dict.get((map.x[k], map.y[k]-1), " ") == " ":
-            create_square(map.x[k], map.y[k]-1, identifier)
-            return
-        elif n == 4 and board_dict.get((map.x[k], map.y[k]+1), " ") == " ":
-            create_square(map.x[k], map.y[k]+1, identifier)
-            return
-
-def gen():
-    k = map.id.index("x")
-    board_dict_update()
-    if board_dict.get((map.x[k]-1, map.y[k]), " ") != " " and board_dict.get((map.x[k]+1, map.y[k]), " ") != " " and board_dict.get((map.x[k], map.y[k]-1), " ") != " " and board_dict.get((map.x[k], map.y[k]+1), " ") != " ":
-        return
-    n = roll(30)
-    if n <= 20:
-        place_object("□")
-    elif n <= 22:
-        place_object("□")
-        if board_dict.get((map.x[k]-1, map.y[k]), " ") != " " and board_dict.get((map.x[k]+1, map.y[k]), " ") != " " and board_dict.get((map.x[k], map.y[k]-1), " ") != " " and board_dict.get((map.x[k], map.y[k]+1), " ") != " ":
-            return
-        place_object("□")
-    elif lvl == 1:
-        if n <= 25:
-            place_object("S")
-            map.Mhp.append(2)
-            map.Mdamage.append(3)
-            map.Mdefense.append(0)
-            map.Mexp.append(1)
-            map.Mid.append("S")
-            map.MplaceID.append(len(map.id)-1)
-        elif n <= 28:
-            place_object("K")
-            map.Mhp.append(4)
-            map.Mdamage.append(2)
-            map.Mdefense.append(0)
-            map.Mexp.append(2)
-            map.Mid.append("K")
-            map.MplaceID.append(len(map.id)-1)
-        else:
-            place_object("C")
-    elif lvl == 2:
-        if n <= 24:
-            place_object("K")
-            map.Mhp.append(4)
-            map.Mdamage.append(2)
-            map.Mdefense.append(0)
-            map.Mexp.append(2)
-            map.Mid.append("K")
-            map.MplaceID.append(len(map.id)-1)
-        elif n <= 26:
-            place_object("L")
-            map.Mhp.append(10)
-            map.Mdamage.append(4)
-            map.Mdefense.append(1)
-            map.Mexp.append(4)
-            map.Mid.append("L")
-            map.MplaceID.append(len(map.id)-1)
-        elif n <= 28:
-            place_object("F")
-            map.Mhp.append(6)
-            map.Mdamage.append(6)
-            map.Mdefense.append(0)
-            map.Mexp.append(3)
-            map.Mid.append("F")
-            map.MplaceID.append(len(map.id)-1)
-        else:
-            place_object("C")
-    elif lvl >= 3:
-        if n <= 24:
-            place_object("F")
-            map.Mhp.append(6)
-            map.Mdamage.append(6)
-            map.Mdefense.append(0)
-            map.Mexp.append(3)
-            map.Mid.append("F")
-            map.MplaceID.append(len(map.id)-1)
-        elif n <= 26:
-            place_object("O")
-            map.Mhp.append(10)
-            map.Mdamage.append(8)
-            map.Mdefense.append(2)
-            map.Mexp.append(6)
-            map.Mid.append("O")
-            map.MplaceID.append(len(map.id)-1)
-        elif n <= 28:
-            place_object("T")
-            map.Mhp.append(16)
-            map.Mdamage.append(6)
-            map.Mdefense.append(3)
-            map.Mexp.append(7)
-            map.Mid.append("T")
-            map.MplaceID.append(len(map.id)-1)
-        else:
-            place_object("C")
-
 def equip():
     print("Do you want to equip this item? (y/n)")
     choice = input()
     return choice
 
 def attack(dx, dy):
-    global action_taken, weapon, weapon_damage, armor, armor_defense, extra_slot, extra_damage, extra_defense, exp, lvl, max_hp, hp
+    global action_taken, weapon, weapon_damage, armor, armor_defense, extra_slot, extra_damage, extra_defense, exp, max_hp, hp
     k = map.id.index("x")
     target_x = map.x[k] + dx
     target_y = map.y[k] + dy
@@ -182,7 +77,7 @@ def attack(dx, dy):
                 action_taken = True
                 print("You open the chest and find treasure!")
                 map.id[n] = "□"
-                if lvl == 1:
+                if map.lvl == 1:
                     treasure_roll = roll(4)
                     if treasure_roll == 1:
                         print("You found a dagger! (Damage 1d3)")
@@ -206,7 +101,7 @@ def attack(dx, dy):
                             extra_slot = "defense amulet 1"
                             extra_defense = 1
                             extra_damage = 0
-                if lvl == 2:
+                if map.lvl == 2:
                     treasure_roll = roll(6)
                     if treasure_roll == 1:
                         print("You found a short sword! (Damage 1d6)")
@@ -241,7 +136,7 @@ def attack(dx, dy):
                             extra_slot = "health potion"
                             extra_damage = 0
                             extra_defense = 0
-                if lvl >= 3:
+                if map.lvl >= 3:
                     treasure_roll = roll(6)
                     if treasure_roll == 1:
                         print("You found a longsword! (Damage 1d8)")
@@ -298,22 +193,17 @@ def attack(dx, dy):
                     map.Mexp.pop(monster_index)
                     map.Mid.pop(monster_index)
                     map.MplaceID.pop(monster_index)
-                    if exp >= lvl * 10:
-                        exp -= lvl * 10
-                        lvl += 1
-                        print(f"You leveled up! You are now level {lvl}!")
+                    if exp >= map.lvl * 10:
+                        exp -= map.lvl * 10
+                        map.lvl += 1
+                        print(f"You leveled up! You are now level {map.lvl}!")
                         max_hp += 5
                         hp = max_hp
                         print(f"Your max HP increased to {max_hp}!")
             else:
                 return
 
-map.x.append(0)
-map.y.append(0)
-map.id.append("x")
-map.standon.append(True)
-create_square(1, 0, "□")
-create_square(-1, 0, "□")
+g.start()
 
 print ("You are 'x'.")
 print ("Squares you can stand on are marked with '□'.")
@@ -336,7 +226,7 @@ while True:
     print("choose an action: ")
     action = input()
     if action == "i":
-        print(f"HP: {hp}/{max_hp}, EXP: {exp}, Level: {lvl}, Exp to next level: {lvl * 10- exp}")
+        print(f"HP: {hp}/{max_hp}, EXP: {exp}, Level: {map.lvl}, Exp to next level: {map.lvl * 10- exp}")
         print(f"Weapon: {weapon} (Damage: 1d{weapon_damage})")
         print(f"Armor: {armor} (Defense: {armor_defense})")
         print(f"Extra Slot: {extra_slot}")
@@ -369,16 +259,16 @@ while True:
         print ("Good luck!")
     elif action == "m":
         print("level 1 monsters:")
-        print("K - Kobold (HP: 4, Damage: 1d2)")
-        print("S - slime (HP: 2, Damage: 1d3) slimes can't move")
-        if lvl >= 2:
+        print("K - Kobold (HP: 4, Damage: 1d2)") #exp 2
+        print("S - slime (HP: 2, Damage: 1d3) slimes can't move") #exp 1
+        if map.lvl >= 2:
             print("level 2 monsters:")
-            print("L - Lizardman (HP: 10, Damage: 1d3, defense: 1)")
-            print("F - Freakish Abberation (HP: 6, Damage: 1d6)")
-            if lvl >= 3:
+            print("L - Lizardman (HP: 10, Damage: 1d3, defense: 1)") #exp 4
+            print("F - Freakish Abberation (HP: 6, Damage: 1d6)") #exp 3
+            if map.lvl >= 3:
                 print("level 3 monsters:")
-                print("O - Orc (HP: 10, Damage: 1d8, defense: 2)")
-                print("T - Troll (HP: 16, Damage: 1d6, defense: 3)")
+                print("O - Orc (HP: 10, Damage: 1d8, defense: 2)") #exp 6
+                print("T - Troll (HP: 16, Damage: 1d6, defense: 3)") #exp 7
     elif action == "aa":
         attack(-1, 0)
     elif action == "dd":

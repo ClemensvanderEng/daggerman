@@ -1,8 +1,12 @@
+# square data
 x = []
 y = []
 id = []
-standon = []
+genID = []
 
+lvl = 1
+
+# monster data
 Mhp = []
 Mdamage = []
 Mdefense = []
