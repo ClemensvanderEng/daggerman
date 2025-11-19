@@ -1,9 +1,5 @@
 import random
-
-x = []
-y = []
-id = []
-standon = []
+import map
 
 exp = 0
 lvl = 1
@@ -19,161 +15,154 @@ extra_slot = "Nothing"
 
 board_dict = {}
 
-Mhp = []
-Mdamage = []
-Mdefense = []
-Mexp = []
-Mid = []
-MplaceID = []
-
 def roll(num_sides):
     roll = random.randint(1, num_sides)
     return roll
 
+def board_dict_update():
+    global board_dict
+    for n in range (len(map.id)):
+        board_dict[(map.x[n], map.y[n])] = map.id[n]
+
 def create_square(x_coord, y_coord, identifier):
-    x.append(x_coord)
-    y.append(y_coord)
-    id.append(identifier)
-    standon.append(False)
+    map.x.append(x_coord)
+    map.y.append(y_coord)
+    map.id.append(identifier)
+    map.standon.append(False)
 
 def show_board():
-    k = id.index("x")
-    board_dict = {}
-    for n in range(len(id)):
-        board_dict[(x[n], y[n])] = id[n]
+    k = map.id.index("x")
+    board_dict_update()
     for i in range(-3, 4):
         for j in range(-3, 4):
-            cell = board_dict.get((x[k]+j, y[k]+i), " ")
+            cell = board_dict.get((map.x[k]+j, map.y[k]+i), " ")
             print(cell, end=" ")
         print()
 
 def move(dx, dy):
     global action_taken
-    k = id.index("x")
-    for n in range(len(id)):
-        board_dict[(x[n], y[n])] = id[n]
-    if board_dict.get((x[k]+dx, y[k]+dy), " ") == "□":
-        id[k] = "□"
-        id[next(i for i, (xx, yy) in enumerate(zip(x, y)) if xx == x[k]+dx and yy == y[k]+dy)] = "x"
-        k = id.index("x")
-        if standon[k] == False:
+    k = map.id.index("x")
+    board_dict_update()
+    if board_dict.get((map.x[k]+dx, map.y[k]+dy), " ") == "□":
+        map.id[k] = "□"
+        map.id[next(i for i, (xx, yy) in enumerate(zip(map.x, map.y)) if xx == map.x[k]+dx and yy == map.y[k]+dy)] = "x"
+        k = map.id.index("x")
+        if map.standon[k] == False:
             gen()
-            standon[k] = True
+            map.standon[k] = True
         action_taken = True
 
 def move_object(dx,dy):
     global board_dict, m, moved
-    if board_dict.get((x[MplaceID[m]]+dx, y[MplaceID[m]]+dy), " ") == "□":
+    if board_dict.get((map.x[map.MplaceID[m]]+dx, map.y[map.MplaceID[m]]+dy), " ") == "□":
         moved = True
-        id[MplaceID[m]] = "□"
-        id[next(i for i, (xx, yy) in enumerate(zip(x, y)) if xx == x[MplaceID[m]]+dx and yy == y[MplaceID[m]]+dy)] = Mid[m]
-        MplaceID[m] = next(i for i, (xx, yy) in enumerate(zip(x, y)) if xx == x[MplaceID[m]]+dx and yy == y[MplaceID[m]]+dy)  
+        map.id[map.MplaceID[m]] = "□"
+        map.id[next(i for i, (xx, yy) in enumerate(zip(map.x, map.y)) if xx == map.x[map.MplaceID[m]]+dx and yy == map.y[map.MplaceID[m]]+dy)] = map.Mid[m]
+        map.MplaceID[m] = next(i for i, (xx, yy) in enumerate(zip(map.x, map.y)) if xx == map.x[map.MplaceID[m]]+dx and yy == map.y[map.MplaceID[m]]+dy)  
         return True  
 
 def place_object(identifier):
-    k = id.index("x")
-    for n in range(len(id)):
-        board_dict[(x[n], y[n])] = id[n]
+    k = map.id.index("x")
+    board_dict_update()
     while True:
         n = roll(4)
-        if n == 1 and board_dict.get((x[k]-1, y[k]), " ") == " ":
-            create_square(x[k]-1, y[k], identifier)
+        if n == 1 and board_dict.get((map.x[k]-1, map.y[k]), " ") == " ":
+            create_square(map.x[k]-1, map.y[k], identifier)
             return
-        elif n == 2 and board_dict.get((x[k]+1, y[k]), " ") == " ":
-            create_square(x[k]+1, y[k], identifier)
+        elif n == 2 and board_dict.get((map.x[k]+1, map.y[k]), " ") == " ":
+            create_square(map.x[k]+1, map.y[k], identifier)
             return
-        elif n == 3 and board_dict.get((x[k], y[k]-1), " ") == " ":
-            create_square(x[k], y[k]-1, identifier)
+        elif n == 3 and board_dict.get((map.x[k], map.y[k]-1), " ") == " ":
+            create_square(map.x[k], map.y[k]-1, identifier)
             return
-        elif n == 4 and board_dict.get((x[k], y[k]+1), " ") == " ":
-            create_square(x[k], y[k]+1, identifier)
+        elif n == 4 and board_dict.get((map.x[k], map.y[k]+1), " ") == " ":
+            create_square(map.x[k], map.y[k]+1, identifier)
             return
 
 def gen():
-    k = id.index("x")
-    for f in range(len(id)):
-        board_dict[(x[f], y[f])] = id[f]
-    if board_dict.get((x[k]-1, y[k]), " ") != " " and board_dict.get((x[k]+1, y[k]), " ") != " " and board_dict.get((x[k], y[k]-1), " ") != " " and board_dict.get((x[k], y[k]+1), " ") != " ":
+    k = map.id.index("x")
+    board_dict_update()
+    if board_dict.get((map.x[k]-1, map.y[k]), " ") != " " and board_dict.get((map.x[k]+1, map.y[k]), " ") != " " and board_dict.get((map.x[k], map.y[k]-1), " ") != " " and board_dict.get((map.x[k], map.y[k]+1), " ") != " ":
         return
     n = roll(30)
     if n <= 20:
         place_object("□")
     elif n <= 22:
         place_object("□")
-        if board_dict.get((x[k]-1, y[k]), " ") != " " and board_dict.get((x[k]+1, y[k]), " ") != " " and board_dict.get((x[k], y[k]-1), " ") != " " and board_dict.get((x[k], y[k]+1), " ") != " ":
+        if board_dict.get((map.x[k]-1, map.y[k]), " ") != " " and board_dict.get((map.x[k]+1, map.y[k]), " ") != " " and board_dict.get((map.x[k], map.y[k]-1), " ") != " " and board_dict.get((map.x[k], map.y[k]+1), " ") != " ":
             return
         place_object("□")
     elif lvl == 1:
         if n <= 25:
             place_object("S")
-            Mhp.append(2)
-            Mdamage.append(3)
-            Mdefense.append(0)
-            Mexp.append(1)
-            Mid.append("S")
-            MplaceID.append(len(id)-1)
+            map.Mhp.append(2)
+            map.Mdamage.append(3)
+            map.Mdefense.append(0)
+            map.Mexp.append(1)
+            map.Mid.append("S")
+            map.MplaceID.append(len(map.id)-1)
         elif n <= 28:
             place_object("K")
-            Mhp.append(4)
-            Mdamage.append(2)
-            Mdefense.append(0)
-            Mexp.append(2)
-            Mid.append("K")
-            MplaceID.append(len(id)-1)
+            map.Mhp.append(4)
+            map.Mdamage.append(2)
+            map.Mdefense.append(0)
+            map.Mexp.append(2)
+            map.Mid.append("K")
+            map.MplaceID.append(len(map.id)-1)
         else:
             place_object("C")
     elif lvl == 2:
         if n <= 24:
             place_object("K")
-            Mhp.append(4)
-            Mdamage.append(2)
-            Mdefense.append(0)
-            Mexp.append(2)
-            Mid.append("K")
-            MplaceID.append(len(id)-1)
+            map.Mhp.append(4)
+            map.Mdamage.append(2)
+            map.Mdefense.append(0)
+            map.Mexp.append(2)
+            map.Mid.append("K")
+            map.MplaceID.append(len(map.id)-1)
         elif n <= 26:
             place_object("L")
-            Mhp.append(10)
-            Mdamage.append(4)
-            Mdefense.append(1)
-            Mexp.append(4)
-            Mid.append("L")
-            MplaceID.append(len(id)-1)
+            map.Mhp.append(10)
+            map.Mdamage.append(4)
+            map.Mdefense.append(1)
+            map.Mexp.append(4)
+            map.Mid.append("L")
+            map.MplaceID.append(len(map.id)-1)
         elif n <= 28:
             place_object("F")
-            Mhp.append(6)
-            Mdamage.append(6)
-            Mdefense.append(0)
-            Mexp.append(3)
-            Mid.append("F")
-            MplaceID.append(len(id)-1)
+            map.Mhp.append(6)
+            map.Mdamage.append(6)
+            map.Mdefense.append(0)
+            map.Mexp.append(3)
+            map.Mid.append("F")
+            map.MplaceID.append(len(map.id)-1)
         else:
             place_object("C")
     elif lvl >= 3:
         if n <= 24:
             place_object("F")
-            Mhp.append(6)
-            Mdamage.append(6)
-            Mdefense.append(0)
-            Mexp.append(3)
-            Mid.append("F")
-            MplaceID.append(len(id)-1)
+            map.Mhp.append(6)
+            map.Mdamage.append(6)
+            map.Mdefense.append(0)
+            map.Mexp.append(3)
+            map.Mid.append("F")
+            map.MplaceID.append(len(map.id)-1)
         elif n <= 26:
             place_object("O")
-            Mhp.append(10)
-            Mdamage.append(8)
-            Mdefense.append(2)
-            Mexp.append(6)
-            Mid.append("O")
-            MplaceID.append(len(id)-1)
+            map.Mhp.append(10)
+            map.Mdamage.append(8)
+            map.Mdefense.append(2)
+            map.Mexp.append(6)
+            map.Mid.append("O")
+            map.MplaceID.append(len(map.id)-1)
         elif n <= 28:
             place_object("T")
-            Mhp.append(16)
-            Mdamage.append(6)
-            Mdefense.append(3)
-            Mexp.append(7)
-            Mid.append("T")
-            MplaceID.append(len(id)-1)
+            map.Mhp.append(16)
+            map.Mdamage.append(6)
+            map.Mdefense.append(3)
+            map.Mexp.append(7)
+            map.Mid.append("T")
+            map.MplaceID.append(len(map.id)-1)
         else:
             place_object("C")
 
@@ -184,15 +173,15 @@ def equip():
 
 def attack(dx, dy):
     global action_taken, weapon, weapon_damage, armor, armor_defense, extra_slot, extra_damage, extra_defense, exp, lvl, max_hp, hp
-    k = id.index("x")
-    target_x = x[k] + dx
-    target_y = y[k] + dy
-    for n in range(len(id)):
-        if x[n] == target_x and y[n] == target_y:
-            if id[n] == "C":
+    k = map.id.index("x")
+    target_x = map.x[k] + dx
+    target_y = map.y[k] + dy
+    for n in range(len(map.id)):
+        if map.x[n] == target_x and map.y[n] == target_y:
+            if map.id[n] == "C":
                 action_taken = True
                 print("You open the chest and find treasure!")
-                id[n] = "□"
+                map.id[n] = "□"
                 if lvl == 1:
                     treasure_roll = roll(4)
                     if treasure_roll == 1:
@@ -202,7 +191,7 @@ def attack(dx, dy):
                             weapon_damage = 3
                     elif treasure_roll == 2:
                         print("You found a Leather Armor! (Defense +1)")
-                        if equip == "y":
+                        if equip() == "y":
                             armor = "Leather Armor"
                             armor_defense = 1
                     elif treasure_roll == 3:
@@ -287,28 +276,28 @@ def attack(dx, dy):
                             extra_slot = "health potion"
                             extra_damage = 0
                             extra_defense = 0
-            elif id[n] != "□":
+            elif map.id[n] != "□":
                 action_taken = True
-                print(f"You attack the {id[n]}!")
-                monster_index = MplaceID.index(n)
-                attack_roll = roll(weapon_damage) + extra_damage - Mdefense[monster_index]
+                print(f"You attack the {map.id[n]}!")
+                monster_index = map.MplaceID.index(n)
+                attack_roll = roll(weapon_damage) + extra_damage - map.Mdefense[monster_index]
                 if attack_roll <= 0:
                     print("Your attack did no damage!")
                     return
                 print(f"You deal {attack_roll} damage!")
-                Mhp[monster_index] -= attack_roll
-                if Mhp[monster_index] <= 0:
-                    print(f"You defeated the {id[n]}!")
-                    exp_gain = Mexp[monster_index]
+                map.Mhp[monster_index] -= attack_roll
+                if map.Mhp[monster_index] <= 0:
+                    print(f"You defeated the {map.id[n]}!")
+                    exp_gain = map.Mexp[monster_index]
                     print(f"You gain {exp_gain} EXP!")
                     exp += exp_gain
-                    id[n] = "□"
-                    Mhp.pop(monster_index)
-                    Mdamage.pop(monster_index)
-                    Mdefense.pop(monster_index)
-                    Mexp.pop(monster_index)
-                    Mid.pop(monster_index)
-                    MplaceID.pop(monster_index)
+                    map.id[n] = "□"
+                    map.Mhp.pop(monster_index)
+                    map.Mdamage.pop(monster_index)
+                    map.Mdefense.pop(monster_index)
+                    map.Mexp.pop(monster_index)
+                    map.Mid.pop(monster_index)
+                    map.MplaceID.pop(monster_index)
                     if exp >= lvl * 10:
                         exp -= lvl * 10
                         lvl += 1
@@ -319,10 +308,10 @@ def attack(dx, dy):
             else:
                 return
 
-x.append(0)
-y.append(0)
-id.append("x")
-standon.append(True)
+map.x.append(0)
+map.y.append(0)
+map.id.append("x")
+map.standon.append(True)
 create_square(1, 0, "□")
 create_square(-1, 0, "□")
 
@@ -418,26 +407,25 @@ while True:
             print("You cast the heal spell and restored 2 HP!")
             action_taken = True
     if action_taken:
-        k = id.index("x")
-        for m in range(len(Mid)):
-            if abs(x[MplaceID[m]]-x[k]) + abs(y[MplaceID[m]]-y[k]) <= 1:
-                print(f"The {Mid[m]} attacks you!")
-                monster_attack = roll(Mdamage[m]) - (armor_defense + extra_defense)
+        k = map.id.index("x")
+        for m in range(len(map.Mid)):
+            if abs(map.x[map.MplaceID[m]]-map.x[k]) + abs(map.y[map.MplaceID[m]]-map.y[k]) <= 1:
+                print(f"The {map.Mid[m]} attacks you!")
+                monster_attack = roll(map.Mdamage[m]) - (armor_defense + extra_defense)
                 if monster_attack <= 0:
                     print("The monster's attack did no damage!")
                     continue
-                print(f"The {Mid[m]} deals {monster_attack} damage!")
+                print(f"The {map.Mid[m]} deals {monster_attack} damage!")
                 hp -= monster_attack
                 print (f"Your HP is now {hp}/{max_hp}.")
                 if hp <= 0:
                     print("GAME OVER")
                     exit()
-            elif Mid[m] == "S":
+            elif map.Mid[m] == "S":
                 continue
             else:
-                for n in range(len(id)):
-                    board_dict[(x[n], y[n])] = id[n]
-                if board_dict.get((x[k]-1, y[k]), " ") != "□" and board_dict.get((x[k]+1, y[k]), " ") != "□" and board_dict.get((x[k], y[k]-1), " ") != "□" and board_dict.get((x[k], y[k]+1), " ") != "□":
+                board_dict_update()
+                if board_dict.get((map.x[k]-1, map.y[k]), " ") != "□" and board_dict.get((map.x[k]+1, map.y[k]), " ") != "□" and board_dict.get((map.x[k], map.y[k]-1), " ") != "□" and board_dict.get((map.x[k], map.y[k]+1), " ") != "□":
                     continue
                 moved = False
                 while moved == False:

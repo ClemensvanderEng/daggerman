@@ -1,0 +1,11 @@
+x = []
+y = []
+id = []
+standon = []
+
+Mhp = []
+Mdamage = []
+Mdefense = []
+Mexp = []
+Mid = []
+MplaceID = []
