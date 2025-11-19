@@ -116,8 +116,10 @@ def gen(gen):
                 create_square(xcentre, ycentre, "C", 0)
                 create_square(xcentre, ycentre+1, "□", 0)
                 create_square(xcentre, ycentre-1, "□", 0)
-                create_square(xcentre, ycentre+2, "□", 3)
-                create_square(xcentre, ycentre-2, "□", 2)
+                if random.randint(1,2) == 1:
+                    create_square(xcentre, ycentre+2, "□", 3)
+                else:
+                    create_square(xcentre, ycentre-2, "□", 2)
                 create_square(xcentre+1, ycentre, "□", 0)
                 create_square(xcentre-1, ycentre, "□", 0)
                 create_square(xcentre+2, ycentre, "□", 4)
@@ -195,8 +197,10 @@ def gen(gen):
                 create_square(xcentre, ycentre, "C", 0)
                 create_square(xcentre+1, ycentre, "□", 0)
                 create_square(xcentre-1, ycentre, "□", 0)
-                create_square(xcentre+2, ycentre, "□", 4)
-                create_square(xcentre-2, ycentre, "□", 1)
+                if random.randint(1,2) == 1:
+                    create_square(xcentre+2, ycentre, "□", 4)
+                else:
+                    create_square(xcentre-2, ycentre, "□", 1)
                 create_square(xcentre, ycentre+1, "□", 0)
                 create_square(xcentre, ycentre-1, "□", 0)
                 create_square(xcentre, ycentre+2, "□", 3)

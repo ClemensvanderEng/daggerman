@@ -89,104 +89,150 @@ def attack(dx, dy):
                 print("You open the chest and find treasure!")
                 map.id[n] = "□"
                 if map.lvl == 1:
-                    treasure_roll = roll(4)
-                    if treasure_roll == 1:
+                    treasure_roll = roll(50)
+                    if treasure_roll <= 10:
                         print("You found a dagger! (Damage 1d3)")
                         if equip() == "y":
                             weapon = "dagger"
                             weapon_damage = 3
-                    elif treasure_roll == 2:
+                    elif treasure_roll <= 20:
                         print("You found a Leather Armor! (Defense +1)")
                         if equip() == "y":
                             armor = "Leather Armor"
                             armor_defense = 1
-                    elif treasure_roll == 3:
+                    elif treasure_roll <= 30:
                         print("You found a attack ring! (Damage +1)")
                         if equip() == "y":
                             extra_slot = "attack ring 1"
                             extra_damage = 1
                             extra_defense = 0
-                    elif treasure_roll == 4:
+                    elif treasure_roll <= 40:
                         print ("You found a a defense amulet! (Defense +1)")
                         if equip() == "y":
                             extra_slot = "defense amulet 1"
                             extra_defense = 1
                             extra_damage = 0
-                if map.lvl == 2:
-                    treasure_roll = roll(6)
-                    if treasure_roll == 1:
+                    elif treasure_roll <= 44:
                         print("You found a short sword! (Damage 1d6)")
                         if equip() == "y":
                             weapon = "short sword"
                             weapon_damage = 6
-                    elif treasure_roll == 2:
+                    elif treasure_roll <= 48:
                         print("You found a Chainmail Armor! (Defense +2)")
                         if equip() == "y":
                             armor = "Chainmail Armor"
                             armor_defense = 2
-                    elif treasure_roll == 3:
+                    elif treasure_roll == 49:
+                        print ("you found a health potion! (Restores hp to max when used")
+                        if equip() == "y":
+                            extra_slot = "health potion"
+                            extra_damage = 0
+                            extra_defense = 0
+                    elif treasure_roll == 50:
+                        print("You found a dash magic scroll! (Allows you to move twice in one turn)")
+                        if equip() == "y":
+                            extra_slot = "dash magic scroll"
+                            extra_damage = 0
+                            extra_defense = 0
+                if map.lvl == 2:
+                    treasure_roll = roll(50)
+                    if treasure_roll <= 10:
+                        print("You found a short sword! (Damage 1d6)")
+                        if equip() == "y":
+                            weapon = "short sword"
+                            weapon_damage = 6
+                    elif treasure_roll <= 20:
+                        print("You found a Chainmail Armor! (Defense +2)")
+                        if equip() == "y":
+                            armor = "Chainmail Armor"
+                            armor_defense = 2
+                    elif treasure_roll <= 28:
                         print("You found a swift dagger! (Damage 1d4, use q for swift attack)")
                         if equip() == "y":
                             weapon = "swift dagger"
                             weapon_damage = 4
-                    elif treasure_roll == 4:
+                    elif treasure_roll <= 36:
                         print("You found a power ring! (Damage, defense +1)")
                         if equip() == "y":
                             extra_slot = "power ring 1"
                             extra_damage = 1
                             extra_defense = 1
-                    elif treasure_roll == 5:
+                    elif treasure_roll <= 42:
                         print ("You found a heal magic scroll! (heal 2 hp when casted)")
                         if equip() == "y":
                             extra_slot = "heal 2 magic scroll"
                             extra_defense = 0
                             extra_damage = 0
-                    elif treasure_roll == 6:
+                    elif treasure_roll <= 48:
                         print ("You found a health potion! (Restores hp to max when used)")
                         if equip() == "y":
                             extra_slot = "health potion"
                             extra_damage = 0
                             extra_defense = 0
-                if map.lvl >= 3:
-                    treasure_roll = roll(6)
-                    if treasure_roll == 1:
+                    elif treasure_roll == 49:
                         print("You found a longsword! (Damage 1d8)")
                         if equip() == "y":
                             weapon = "longsword"
                             weapon_damage = 8
-                    elif treasure_roll == 2:
+                    elif treasure_roll == 50:
+                        print("You found a dash magic scroll! (Allows you to move twice in one turn)")
+                        if equip() == "y":
+                            extra_slot = "dash magic scroll"
+                            extra_damage = 0
+                            extra_defense = 0
+                if map.lvl >= 3:
+                    treasure_roll = roll(50)
+                    if treasure_roll <= 10:
+                        print("You found a longsword! (Damage 1d8)")
+                        if equip() == "y":
+                            weapon = "longsword"
+                            weapon_damage = 8
+                    elif treasure_roll <= 20:
                         print("You found a chainmail armor! (Defense +2)")
                         if equip() == "y":
                             armor = "chainmail armor"
                             armor_defense = 2
-                    elif treasure_roll == 3:
+                    elif treasure_roll <= 28:
                         print("You found a swift dagger! (Damage 1d6, use q for swift attack)")
                         if equip() == "y":
                             weapon = "swift dagger"
                             weapon_damage = 6
-                    elif treasure_roll == 4:
+                    elif treasure_roll <= 36:
                         print("You found a attack ring! (Damage +2)")
                         if equip() == "y":
                             extra_slot = "attack ring 2"
                             extra_damage = 2
                             extra_defense = 0
-                    elif treasure_roll == 5:
+                    elif treasure_roll <= 42:
                         print ("You found a a defense amulet! (Defense +2)")
                         if equip() == "y":
                             extra_slot = "defense amulet 2"
                             extra_defense = 2
                             extra_damage = 0
-                    elif treasure_roll == 6:
+                    elif treasure_roll <= 48:
                         print ("You found a health potion! (Restores hp to max when used)")
                         if equip() == "y":
                             extra_slot = "health potion"
                             extra_damage = 0
                             extra_defense = 0
+                    elif treasure_roll == 49:
+                        print("You found a greatsword! (Damage 1d10)")
+                        if equip() == "y":
+                            weapon = "greatsword"
+                            weapon_damage = 10
+                    elif treasure_roll == 50:
+                        print("You found a heal 4 magic scroll! (heal 4 hp when casted)")
+                        if equip() == "y":
+                            extra_slot = "heal 4 magic scroll"
+                            extra_defense = 0
+                            extra_damage = 0
                 return
             elif map.id[n] != "□":
                 action_taken = True
                 print(f"You attack the {map.id[n]}!")
-                monster_index = map.MplaceID.index(n)
+                monster_index = next((m for m in range(len(map.MplaceID)) if map.MplaceID[m] == n), None)
+                if monster_index is None:
+                    return
                 attack_roll = roll(weapon_damage) + extra_damage - map.Mdefense[monster_index]
                 if attack_roll <= 0:
                     print("Your attack did no damage!")
@@ -309,6 +355,33 @@ while True:
                 hp = max_hp
             print("You cast the heal spell and restored 2 HP!")
             action_taken = True
+        elif extra_slot == "heal 4 magic scroll":
+            hp += 4
+            if hp > max_hp:
+                hp = max_hp
+            print("You cast the heal spell and restored 4 HP!")
+            action_taken = True
+        elif extra_slot == "dash magic scroll":
+            print("you can move twice this turn!")
+            move_input1 = input("First move (w/a/s/d): ")
+            if move_input1 == "a":
+                move(-1, 0)
+            elif move_input1 == "d":
+                move(1, 0)
+            elif move_input1 == "w":
+                move(0, -1)
+            elif move_input1 == "s":
+                move(0, 1)
+            show_board()
+            move_input2 = input("Second move (w/a/s/d): ")
+            if move_input2 == "a":
+                move(-1, 0)
+            elif move_input2 == "d":
+                move(1, 0)
+            elif move_input2 == "w":
+                move(0, -1)
+            elif move_input2 == "s":
+                move(0, 1)
     if action_taken:
         k = map.id.index("x")
         for m in range(len(map.Mid)):
