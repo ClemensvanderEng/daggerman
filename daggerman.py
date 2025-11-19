@@ -230,21 +230,21 @@ def attack(dx, dy):
                             armor = "Chainmail Armor"
                             armor_defense = 2
                     elif treasure_roll == 3:
-                        print("You found a swift dagger! (Damage 1d3, use q for swift attack)")
+                        print("You found a swift dagger! (Damage 1d4, use q for swift attack)")
                         if equip() == "y":
                             weapon = "swift dagger"
-                            weapon_damage = 3
+                            weapon_damage = 4
                     elif treasure_roll == 4:
-                        print("You found a attack ring! (Damage +1)")
+                        print("You found a power ring! (Damage, defense +1)")
                         if equip() == "y":
-                            extra_slot = "attack ring 1"
+                            extra_slot = "power ring 1"
                             extra_damage = 1
-                            extra_defense = 0
-                    elif treasure_roll == 5:
-                        print ("You found a a defense amulet! (Defense +1)")
-                        if equip() == "y":
-                            extra_slot = "defense amulet 1"
                             extra_defense = 1
+                    elif treasure_roll == 5:
+                        print ("You found a heal magic scroll! (heal 2 hp when casted)")
+                        if equip() == "y":
+                            extra_slot = "heal 2 magic scroll"
+                            extra_defense = 0
                             extra_damage = 0
                     elif treasure_roll == 6:
                         print ("You found a health potion! (Restores hp to max when used)")
@@ -260,15 +260,15 @@ def attack(dx, dy):
                             weapon = "longsword"
                             weapon_damage = 8
                     elif treasure_roll == 2:
-                        print("You found a Plate Armor! (Defense +3)")
+                        print("You found a chainmail armor! (Defense +2)")
                         if equip() == "y":
-                            armor = "Plate Armor"
-                            armor_defense = 3
+                            armor = "chainmail armor"
+                            armor_defense = 2
                     elif treasure_roll == 3:
-                        print("You found a swift dagger! (Damage 1d4, use q for swift attack)")
+                        print("You found a swift dagger! (Damage 1d6, use q for swift attack)")
                         if equip() == "y":
                             weapon = "swift dagger"
-                            weapon_damage = 4
+                            weapon_damage = 6
                     elif treasure_roll == 4:
                         print("You found a attack ring! (Damage +2)")
                         if equip() == "y":
@@ -338,6 +338,7 @@ print ("Later you may get more options.")
 print ("You can open chests by attacking them.")
 print ("Good luck!")
 
+heal = 0
 while True:
     action_taken = False
     print()
@@ -370,7 +371,9 @@ while True:
             print ("r - restore hp to max.")
         if weapon == "swift dagger":
             print ("q - swift attack.")
-        print ("quirt - end the game.")
+        if extra_slot[-12:-1] == "magic scroll":
+            print ("e - cast spell.")
+        print ("quit - end the game.")
         print ("h - see this help message again.")
         print ("Later you may get more options.")
         print ("You can open chests by attacking them.")
@@ -407,6 +410,13 @@ while True:
             attack(-1, 0)
             attack(1, 0)
             attack(0, 1)
+    elif action == "e":
+        if extra_slot == "heal 2 magic scroll":
+            hp += 2
+            if hp > max_hp:
+                hp = max_hp
+            print("You cast the heal spell and restored 2 HP!")
+            action_taken = True
     if action_taken:
         k = id.index("x")
         for m in range(len(Mid)):
@@ -418,6 +428,7 @@ while True:
                     continue
                 print(f"The {Mid[m]} deals {monster_attack} damage!")
                 hp -= monster_attack
+                print (f"Your HP is now {hp}/{max_hp}.")
                 if hp <= 0:
                     print("GAME OVER")
                     exit()
@@ -439,4 +450,10 @@ while True:
                         move_object(0, -1)
                     elif roll_dir == 4:
                         move_object(0, 1)
+        if heal == 0:
+            heal = 1
+        else:
+            if hp < max_hp:
+                hp += 1
+            heal = 0
                 
