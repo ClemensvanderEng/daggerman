@@ -1,6 +1,7 @@
 import map
 import random
 
+# Generated room tracking
 Lx = []
 Ly = []
 Lid = []
@@ -121,8 +122,8 @@ def gen(gen):
                 create_square(xcentre-1, ycentre, "□", 0)
                 create_square(xcentre+2, ycentre, "□", 4)
                 create_square(xcentre-2, ycentre, "□", 1)
-                create_square(xcentre+1, ycentre-1, "□", 0)
-                create_square(xcentre-1, ycentre+1, "□", 0)
+                create_square(xcentre+1, ycentre+1, "□", 0)
+                create_square(xcentre-1, ycentre-1, "□", 0)
                 create_square(xcentre+1, ycentre-1, "□", 0)
                 create_square(xcentre-1, ycentre+1, "□", 0)
             elif room == 6:
@@ -200,8 +201,8 @@ def gen(gen):
                 create_square(xcentre, ycentre-1, "□", 0)
                 create_square(xcentre, ycentre+2, "□", 3)
                 create_square(xcentre, ycentre-2, "□", 2)
-                create_square(xcentre+1, ycentre-1, "□", 0)
-                create_square(xcentre-1, ycentre+1, "□", 0)
+                create_square(xcentre+1, ycentre+1, "□", 0)
+                create_square(xcentre-1, ycentre-1, "□", 0)
                 create_square(xcentre+1, ycentre-1, "□", 0)
                 create_square(xcentre-1, ycentre+1, "□", 0)
             elif room == 6:

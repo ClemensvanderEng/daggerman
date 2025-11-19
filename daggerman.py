@@ -16,6 +16,12 @@ extra_slot = "Nothing"
 
 board_dict = {}
 
+def find_index_at(xc, yc):
+    for i, (xx, yy) in enumerate(zip(map.x, map.y)):
+        if xx == xc and yy == yc:
+            return i
+    return None
+
 def roll(num_sides):
     roll = random.randint(1, num_sides)
     return roll
@@ -39,8 +45,11 @@ def move(dx, dy):
     k = map.id.index("x")
     board_dict_update()
     if board_dict.get((map.x[k]+dx, map.y[k]+dy), " ") == "□":
+        target_idx = find_index_at(map.x[k]+dx, map.y[k]+dy)
+        if target_idx is None:
+            return
         map.id[k] = "□"
-        map.id[next(i for i, (xx, yy) in enumerate(zip(map.x, map.y)) if xx == map.x[k]+dx and yy == map.y[k]+dy)] = "x"
+        map.id[target_idx] = "x"
         k = map.id.index("x")
         if map.genID[k] == 1:
             g.gen(1)
@@ -54,12 +63,14 @@ def move(dx, dy):
 
 def move_object(dx,dy):
     global board_dict, m, moved
-    if board_dict.get((map.x[map.MplaceID[m]]+dx, map.y[map.MplaceID[m]]+dy), " ") == "□":
+    src_idx = map.MplaceID[m]
+    target_idx = find_index_at(map.x[src_idx]+dx, map.y[src_idx]+dy)
+    if target_idx is not None and board_dict.get((map.x[src_idx]+dx, map.y[src_idx]+dy), " ") == "□":
         moved = True
-        map.id[map.MplaceID[m]] = "□"
-        map.id[next(i for i, (xx, yy) in enumerate(zip(map.x, map.y)) if xx == map.x[map.MplaceID[m]]+dx and yy == map.y[map.MplaceID[m]]+dy)] = map.Mid[m]
-        map.MplaceID[m] = next(i for i, (xx, yy) in enumerate(zip(map.x, map.y)) if xx == map.x[map.MplaceID[m]]+dx and yy == map.y[map.MplaceID[m]]+dy)  
-        return True  
+        map.id[src_idx] = "□"
+        map.id[target_idx] = map.Mid[m]
+        map.MplaceID[m] = target_idx
+        return True
 
 def equip():
     print("Do you want to equip this item? (y/n)")
