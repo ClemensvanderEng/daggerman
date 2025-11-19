@@ -19,8 +19,6 @@ extra_slot = "Nothing"
 
 board_dict = {}
 
-Mx = []
-My = []
 Mhp = []
 Mdamage = []
 Mdefense = []
@@ -50,6 +48,7 @@ def show_board():
         print()
 
 def move(dx, dy):
+    global action_taken
     k = id.index("x")
     for n in range(len(id)):
         board_dict[(x[n], y[n])] = id[n]
@@ -61,6 +60,15 @@ def move(dx, dy):
             gen()
             standon[k] = True
         action_taken = True
+
+def move_object(dx,dy):
+    global board_dict, m, moved
+    if board_dict.get((x[MplaceID[m]]+dx, y[MplaceID[m]]+dy), " ") == "□":
+        moved = True
+        id[MplaceID[m]] = "□"
+        id[next(i for i, (xx, yy) in enumerate(zip(x, y)) if xx == x[MplaceID[m]]+dx and yy == y[MplaceID[m]]+dy)] = Mid[m]
+        MplaceID[m] = next(i for i, (xx, yy) in enumerate(zip(x, y)) if xx == x[MplaceID[m]]+dx and yy == y[MplaceID[m]]+dy)  
+        return True  
 
 def place_object(identifier):
     k = id.index("x")
@@ -98,8 +106,6 @@ def gen():
     elif lvl == 1:
         if n <= 25:
             place_object("S")
-            Mx.append(x[-1])
-            My.append(y[-1])
             Mhp.append(2)
             Mdamage.append(3)
             Mdefense.append(0)
@@ -108,8 +114,6 @@ def gen():
             MplaceID.append(len(id)-1)
         elif n <= 28:
             place_object("K")
-            Mx.append(x[-1])
-            My.append(y[-1])
             Mhp.append(4)
             Mdamage.append(2)
             Mdefense.append(0)
@@ -121,8 +125,6 @@ def gen():
     elif lvl == 2:
         if n <= 24:
             place_object("K")
-            Mx.append(x[-1])
-            My.append(y[-1])
             Mhp.append(4)
             Mdamage.append(2)
             Mdefense.append(0)
@@ -131,8 +133,6 @@ def gen():
             MplaceID.append(len(id)-1)
         elif n <= 26:
             place_object("L")
-            Mx.append(x[-1])
-            My.append(y[-1])
             Mhp.append(10)
             Mdamage.append(4)
             Mdefense.append(1)
@@ -141,8 +141,6 @@ def gen():
             MplaceID.append(len(id)-1)
         elif n <= 28:
             place_object("F")
-            Mx.append(x[-1])
-            My.append(y[-1])
             Mhp.append(6)
             Mdamage.append(6)
             Mdefense.append(0)
@@ -154,8 +152,6 @@ def gen():
     elif lvl >= 3:
         if n <= 24:
             place_object("F")
-            Mx.append(x[-1])
-            My.append(y[-1])
             Mhp.append(6)
             Mdamage.append(6)
             Mdefense.append(0)
@@ -164,8 +160,6 @@ def gen():
             MplaceID.append(len(id)-1)
         elif n <= 26:
             place_object("O")
-            Mx.append(x[-1])
-            My.append(y[-1])
             Mhp.append(10)
             Mdamage.append(8)
             Mdefense.append(2)
@@ -174,8 +168,6 @@ def gen():
             MplaceID.append(len(id)-1)
         elif n <= 28:
             place_object("T")
-            Mx.append(x[-1])
-            My.append(y[-1])
             Mhp.append(16)
             Mdamage.append(6)
             Mdefense.append(3)
@@ -311,8 +303,6 @@ def attack(dx, dy):
                     print(f"You gain {exp_gain} EXP!")
                     exp += exp_gain
                     id[n] = "□"
-                    Mx.pop(monster_index)
-                    My.pop(monster_index)
                     Mhp.pop(monster_index)
                     Mdamage.pop(monster_index)
                     Mdefense.pop(monster_index)
@@ -417,4 +407,36 @@ while True:
             attack(-1, 0)
             attack(1, 0)
             attack(0, 1)
-# print ("GAME OVER")
+    if action_taken:
+        k = id.index("x")
+        for m in range(len(Mid)):
+            if abs(x[MplaceID[m]]-x[k]) + abs(y[MplaceID[m]]-y[k]) <= 1:
+                print(f"The {Mid[m]} attacks you!")
+                monster_attack = roll(Mdamage[m]) - (armor_defense + extra_defense)
+                if monster_attack <= 0:
+                    print("The monster's attack did no damage!")
+                    continue
+                print(f"The {Mid[m]} deals {monster_attack} damage!")
+                hp -= monster_attack
+                if hp <= 0:
+                    print("GAME OVER")
+                    exit()
+            elif Mid[m] == "S":
+                continue
+            else:
+                for n in range(len(id)):
+                    board_dict[(x[n], y[n])] = id[n]
+                if board_dict.get((x[k]-1, y[k]), " ") != "□" and board_dict.get((x[k]+1, y[k]), " ") != "□" and board_dict.get((x[k], y[k]-1), " ") != "□" and board_dict.get((x[k], y[k]+1), " ") != "□":
+                    continue
+                moved = False
+                while moved == False:
+                    roll_dir = roll(4)
+                    if roll_dir == 1:
+                        move_object(-1, 0)
+                    elif roll_dir == 2:
+                        move_object(1, 0)
+                    elif roll_dir == 3:
+                        move_object(0, -1)
+                    elif roll_dir == 4:
+                        move_object(0, 1)
+                
