@@ -305,7 +305,7 @@ def attack(dx, dy):
                     map.Mid.pop(monster_index)
                     map.MplaceID.pop(monster_index)
                     if exp >= (2*map.lvl-1) * 10:
-                        exp -= map.lvl * 10
+                        exp -= (2*map.lvl-1) * 10
                         map.lvl += 1
                         print(f"You leveled up! You are now level {map.lvl}!")
                         max_hp += 5
