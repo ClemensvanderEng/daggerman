@@ -4,8 +4,8 @@ import gen as g
 
 # Player stats
 exp = 0
-max_hp = 30
-hp = 30
+max_hp = 10
+hp = 10
 weapon = "dagger"
 weapon_damage = 2
 extra_damage = 0
