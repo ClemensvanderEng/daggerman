@@ -14,7 +14,7 @@ armor_defense = 0
 extra_defense = 0
 extra_slot = "Nothing"
 
-wormHP = 100
+wormHP = 50
 wormphase = 0
 
 board_dict = {}
@@ -110,7 +110,7 @@ def monster_defeat(monsterID):
         print(f"Your max HP increased to {max_hp}!")
 
 def attack(dx, dy):
-    global action_taken, weapon, weapon_damage, armor, armor_defense, extra_slot, extra_damage, extra_defense
+    global action_taken, weapon, weapon_damage, armor, armor_defense, extra_slot, extra_damage, extra_defense, wormHP
     k = map.id.index("x")
     target_x = map.x[k] + dx
     target_y = map.y[k] + dy
@@ -453,6 +453,18 @@ def kill_magic(dx, dy, strength):
                 if map.Mhp[monster_index] <= strength:
                     monster_defeat(monster_index)
 
+def wormmove(dx ,dy):
+    global board_dict, moved
+    src_idx = map.wormplaceID[0]
+    target_idx = find_index_at(map.x[src_idx]+dx, map.y[src_idx]+dy)
+    if target_idx is not None and board_dict.get((map.x[src_idx]+dx, map.y[src_idx]+dy), " ") == "□":
+        moved = True
+        map.id[target_idx] = "◉"
+        map.id[map.wormplaceID[2]] = "□"
+        map.wormplaceID[2] = map.wormplaceID[1]
+        map.wormplaceID[1] = map.wormplaceID[0]
+        map.wormplaceID[0] = target_idx
+
 g.start()
 
 print ("You are 'x'.")
@@ -538,7 +550,7 @@ while True:
                                 print("W - giant acid worm (HP: 30, Damage: 1d20, Defense: 6)") #exp 40
                                 if map.lvl >= 8:
                                     print("level 8 monsters:")
-                                    print("◉ - Purple worm (HP: 100 , Damage: 1d20, Defense: 12)")
+                                    print("◉ - Purple worm (HP: 50 , Damage: 1d20, Defense: 12)")
     elif action == "aa":
         attack(-1, 0)
     elif action == "dd":
@@ -714,7 +726,7 @@ while True:
                 if hp < max_hp:
                     hp += 1
                 heal = 0
-        if map.lvl == 8:
+        if map.wormplaceID[0] != -1:
             if wormHP > 0:
                 if abs(map.x[map.wormplaceID[0]]-map.x[k]) + abs(map.y[map.MplaceID[m]]-map.y[k]) <= 2:
                     print(f"The purple worm attacks you!")
@@ -729,5 +741,19 @@ while True:
                         print("GAME OVER")
                         show_board()
                         exit()
+                moved = False
+                attempts = 0
+                while moved == False and attempts < 8:
+                    attempts += 1
+                    roll_dir = roll(4)
+                    if roll_dir == 1:
+                        wormmove(-1, 0)
+                    elif roll_dir == 2:
+                        wormmove(1, 0)
+                    elif roll_dir == 3:
+                        wormmove(0, -1)
+                    elif roll_dir == 4:
+                        wormmove(0, 1)
             else:
                 print("You defeated the purple worm and have won this run!")
+                exit()
