@@ -25,7 +25,7 @@ wormphase = 0
 
 board_dict = {}
 
-Pclass = "warrior"  # Possible classes: adventurer, roque, wizard, warrior
+Pclass = "None"  # Possible classes: adventurer, roque, wizard, warrior
 
 def find_index_at(xc, yc):
     for i, (xx, yy) in enumerate(zip(map.x, map.y)):
