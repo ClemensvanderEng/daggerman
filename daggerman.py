@@ -16,7 +16,7 @@ extra_slot = "Nothing"
 adventurer_extra_slot = "Nothing"
 adventurer_extra_damage = 0
 adventurer_extra_defense = 0
-spells_known = []
+spells_known = ["dash magic scroll"]
 class_attack = 0
 class_defense = 0
 
@@ -25,7 +25,7 @@ wormphase = 0
 
 board_dict = {}
 
-Pclass = "None"  # Possible classes: adventurer, roque, wizard, warrior
+Pclass = "wizard"  # Possible classes: adventurer, roque, wizard, warrior
 
 def find_index_at(xc, yc):
     for i, (xx, yy) in enumerate(zip(map.x, map.y)):
@@ -606,10 +606,12 @@ while True:
             for spell_name in spells_known:
                 print(f"{index} - {spell_name}")
                 index += 1
-            spell_choice = input()
             save = extra_slot
-            if isinstance(spell_choice, str):
-                extra_slot = spells_known[spell_choice]
+            spell_choice = input("Voer een getal in: ")
+            if spell_choice.isdigit() and int(spell_choice) < len(spells_known):
+                extra_slot = spells_known[int(spell_choice)]
+            else:
+                print("Not a valid number!")
         if extra_slot == "heal 2 magic scroll":
             hp += 2
             if hp > max_hp:
