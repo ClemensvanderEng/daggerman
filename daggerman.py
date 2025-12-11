@@ -20,7 +20,7 @@ spells_known = []
 class_attack = 0
 class_defense = 0
 
-wormHP = 50
+wormHP = 50 + 10*map.runscompleted
 wormphase = 0
 
 board_dict = {}
@@ -483,6 +483,19 @@ while True:
         print(f"Extra Slot: {extra_slot}")
         if Pclass == "adventurer":
             print(f"Adventurer Slot: {adventurer_extra_slot}")
+            print("As an adventurer you can switch between your extra slots and  your adventurer slot by pressing f.")
+            print("You can't get bonusses or do special actions from your adventurer slot.")
+        elif Pclass == "roque":
+            if weapon.endswith("dagger"):
+                print("As a roque you do +1 damage with daggers.")
+                print("You can dash with f to move twice in one turn.")
+        elif Pclass == "wizard":
+            print("Spells known:")
+            for spell_name in spells_known:
+                print(f"- {spell_name[0:-13]}")
+            print("As a wizard you can learn spells instead of using a scroll.")
+        elif Pclass == "warrior":
+            print("As a warrior you have 25 percent chance you block an attack.")
         print()
     elif action == "quit":
         break
