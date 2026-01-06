@@ -1,4 +1,6 @@
 import random
+
+from kiwisolver import strength
 import map
 import gen
 import os
@@ -15,18 +17,15 @@ armor_defense = 0
 extra_defense = 0
 extra_slot = "Nothing"
 adventurer_extra_slot = "Nothing"
-adventurer_extra_damage = 0
 adventurer_extra_defense = 0
 spells_known = []
 class_attack = 0
-class_defense = 0
 
 wormHP = 50 + 10*map.runscompleted
 
 board_dict = {}
 
-Pclass = "None"  # Possible classes: adventurer, roque, wizard, warrior, necromancer
-
+Pclass = "None"  # Possible classes: adventurer, roque, wizard, warrior, necromancer, pyromancer
 
 def find_index_at(xc, yc):
     for i, (xx, yy) in enumerate(zip(map.x, map.y)):
@@ -148,7 +147,7 @@ def attack(dx, dy):
     target_y = map.y[k] + dy
     if Pclass == "roque":
         if weapon.endswith("dagger"):
-            class_attack = 1
+            class_attack = 2
         else:
             class_attack = 0
     for n in range(len(map.id)):
@@ -569,22 +568,29 @@ if map.runscompleted == 0:
 if map.runscompleted > 0:
     print()
     print("As an adventurer you can switch between your extra slots and  your adventurer slot by pressing f.")
-    print("You can't get bonusses or do special actions from your adventurer slot.")
+    print("You can't do special actions from your adventurer slot.")
     print()
-    print("As a roque you do +1 damage with daggers.")
+    print("As a roque you do +2 damage with daggers.")
     print("You can dash with f to move twice in one turn.")
     print()
     print("As a wizard you can learn spells instead of using a scroll.")
     print()
     print("As a warrior you have 25 percent chance you block an attack.")
+    print("You also do +1 damage.")
     print()
     print("As a necromancer you can suck life of almost dead creatures with f gaining +1 hp per level")
     print()
-    print("What class do you want to be? (adventurer, roque, wizard, warrior, necromancer)")
+    print("As a pyromancer you can burn stationary enemies with f.")
+    print("You also do +1 fire damage.")
+    print()
+    print("What class do you want to be? (adventurer, roque, wizard, warrior, necromancer, pyromancer)")
     Pclass = input()
-    while Pclass not in ["adventurer", "roque", "wizard", "warrior", "necromancer"]:
-        print("Invalid class. Please choose from: adventurer, roque, wizard, warrior, necromancer")
+    while Pclass not in ["adventurer", "roque", "wizard", "warrior", "necromancer", "pyromancer"]:
+        print("Invalid class. Please choose from: adventurer, roque, wizard, warrior, necromancer, pyromancer")
         Pclass = input()
+
+if Pclass == "pyromancer":
+    class_attack = 1
 
 heal = 0
 while True:
@@ -614,8 +620,12 @@ while True:
             print("As a wizard you can learn spells instead of using a scroll.")
         elif Pclass == "warrior":
             print("As a warrior you have 25 percent chance you block an attack.")
+            print("You also do +1 damage.")
         elif Pclass == "necromancer":
             print("As a necromancer you can suck life of almost dead creatures with f gaining +1 hp per level")
+        elif Pclass == "pyromancer":
+            print("As a pyromancer you can burn stationary enemies with f.")
+            print("You also do +1 fire damage.")
         print()
     elif action == "quit":
         break
@@ -653,7 +663,7 @@ while True:
         print(f"S - slime (HP: {2+map.runscompleted}, Damage: 1d3) can't move") #exp 1
         if map.lvl >= 2:
             print("level 2 monsters:")
-            print(f"L - Lizardman (HP: {10+map.runscompleted}, Damage: 1d3, Defense: 1)") #exp 4
+            print(f"L - Lizardman (HP: {10+2*map.runscompleted}, Damage: 1d3, Defense: 1)") #exp 4
             print(f"F - Freakish Abberation (HP: {6+map.runscompleted}, Damage: 1d6)") #exp 3
             if map.lvl >= 3:
                 print("level 3 monsters:")
@@ -900,8 +910,8 @@ while True:
             extra_slot = adventurer_extra_slot
             adventurer_extra_slot = save
             save = extra_damage
-            extra_damage = adventurer_extra_damage
-            adventurer_extra_damage = save
+            extra_damage = class_attack
+            class_attack = save
             save = extra_defense
             extra_defense = adventurer_extra_defense
             adventurer_extra_defense = save
@@ -921,6 +931,16 @@ while True:
                 if hp > max_hp:
                     hp = max_hp
                 print(f"You sucked all life from the creature and restored {map.lvl} HP!")
+        elif Pclass == "pyromancer":
+            k = map.id.index("x")
+            for n in range(len(map.id)):
+                if abs(map.x[n]-map.x[k]) + abs(map.y[n]-map.y[k]) <= 1:
+                    if map.id[n] in ["S", "E", "P"]:
+                        action_taken = True
+                        print(f"You burn and kill the {map.id[n]}!")
+                        monster_index = next((m for m in range(len(map.MplaceID)) if map.MplaceID[m] == n), None)
+                        if monster_index is not None:
+                            monster_defeat(monster_index)
     if action_taken:
         k = map.id.index("x")
         m = -1
@@ -944,7 +964,7 @@ while True:
                     if roll(4) == 1:
                         print("You dodged the attack!")
                         continue
-                monster_attack = roll(map.Mdamage[m]) - (armor_defense + extra_defense + class_defense)
+                monster_attack = roll(map.Mdamage[m]) - (armor_defense + extra_defense + adventurer_extra_defense)
                 if monster_attack <= 0:
                     print("The monster's attack did no damage!")
                     continue

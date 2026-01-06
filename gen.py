@@ -36,7 +36,7 @@ def create_mon(new_id):
         elif new_id == "F":
             create_monster(6+map.runscompleted, 6, 0, 3, "F")
         elif new_id == "L":
-            create_monster(10+map.runscompleted, 3, 1, 4, "L")
+            create_monster(10+map.runscompleted*2, 3, 1, 4, "L")
         elif new_id == "O":
             create_monster(10+map.runscompleted*2, 8, 2, 6, "O")
         elif new_id == "T":
