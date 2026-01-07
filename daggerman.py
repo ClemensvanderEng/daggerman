@@ -19,6 +19,7 @@ adventurer_extra_defense = 0
 spells_known = ["heal 2 magic scroll"]
 class_attack = 0
 mission_done = []
+mission_choice = ""
 
 total_damage_taken = 0  
 total_chests_opened = 0
