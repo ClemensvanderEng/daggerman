@@ -15,11 +15,15 @@ extra_damage = 0
 armor = "Nothing"
 armor_defense = 0
 extra_defense = 0
-extra_slot = "magic missile magic scroll"
+extra_slot = "Nothing"
 adventurer_extra_slot = "Nothing"
 adventurer_extra_defense = 0
 spells_known = ["heal 2 magic scroll"]
 class_attack = 0
+
+total_damage_taken = 0  
+total_chests_opened = 0
+total_damage_done = 0
 
 wormHP = 50 + 10*map.runscompleted
 
@@ -141,7 +145,7 @@ def spell(spell_name):
             extra_defense = 0
 
 def attack(dx, dy):
-    global action_taken, weapon, weapon_damage, armor, armor_defense, extra_slot, extra_damage, extra_defense, wormHP, class_attack
+    global action_taken, weapon, weapon_damage, armor, armor_defense, extra_slot, extra_damage, extra_defense, wormHP, class_attack, total_damage_done, total_chests_opened
     k = map.id.index("x")
     target_x = map.x[k] + dx
     target_y = map.y[k] + dy
@@ -154,6 +158,7 @@ def attack(dx, dy):
         if map.x[n] == target_x and map.y[n] == target_y:
             if map.id[n] == "C":
                 action_taken = True
+                total_chests_opened += 1
                 print("You open the chest and find treasure!")
                 map.id[n] = "□"
                 treasure_roll = roll(50)
@@ -470,6 +475,7 @@ def attack(dx, dy):
                 action_taken = True
                 print(f"You attack the purple worm!")
                 attack_roll = roll(weapon_damage) + extra_damage + class_attack - 12
+                total_damage_done += attack_roll
                 if attack_roll <= 0:
                     print("Your attack did no damage!")
                     return
@@ -482,6 +488,7 @@ def attack(dx, dy):
                 if monster_index is None:
                     return
                 attack_roll = roll(weapon_damage) + extra_damage + class_attack - map.Mdefense[monster_index]
+                total_damage_done += attack_roll
                 if attack_roll <= 0:
                     print("Your attack did no damage!")
                     return
@@ -589,6 +596,18 @@ if map.runscompleted > 0:
         print("Invalid class. Please choose from: adventurer, roque, wizard, warrior, necromancer, pyromancer")
         Pclass = input()
 
+if map.runscompleted > 2:
+    print("Choose a mission: ")
+    print("1 - Complete a run with only using daggers.")
+    print("2 - Complete a run without taking more than 100 damage.")
+    print("3 - Complete a run without opening more than 12 chests.")
+    print("4 - complete a run without using your extra slot.")
+    print("5 - complete a run without armor.")
+    mission_choice = input()
+    while mission_choice not in ["1", "2", "3", "4", "5"]:
+        print("Invalid choice. Please choose 1, 2, 3, 4, or 5.")
+        mission_choice = input()
+
 if Pclass == "pyromancer" or Pclass == "warrior":
     class_attack = 1
 
@@ -626,6 +645,19 @@ while True:
         elif Pclass == "pyromancer":
             print("As a pyromancer you can burn stationary enemies with f.")
             print("You also do +1 fire damage.")
+        print(f"Total damage taken: {total_damage_taken}")
+        print(f"Total damage done: {total_damage_done}")
+        print(f"Total chests opened: {total_chests_opened}")
+        if mission_choice == "1":
+            print("Mission: Complete a run with only using daggers.")
+        elif mission_choice == "2":
+            print("Mission: Complete a run without taking more than 100 damage.")
+        elif mission_choice == "3": 
+            print("Mission: Complete a run without opening more than 12 chests.")
+        elif mission_choice == "4":
+            print("Mission: Complete a run without using your extra slot.")
+        elif mission_choice == "5":
+            print("Mission: Complete a run without armor.")
         print()
     elif action == "quit":
         break
@@ -971,6 +1003,7 @@ while True:
                 if monster_attack <= 0:
                     print("The monster's attack did no damage!")
                     continue
+                total_damage_taken += monster_attack
                 print(f"The {map.Mid[m]} deals {monster_attack} damage!")
                 hp -= monster_attack
                 print (f"Your HP is now {hp}/{max_hp}.")
@@ -1015,6 +1048,7 @@ while True:
                     if monster_attack <= 0:
                         print("The monster's attack did no damage!")
                         continue
+                    total_damage_taken += monster_attack
                     print(f"The purple worm deals {monster_attack} damage!")
                     hp -= monster_attack
                     print (f"Your HP is now {hp}/{max_hp}.")
@@ -1051,3 +1085,24 @@ while True:
                     max_hp += 5
                     hp = max_hp
                     print(f"Your max HP increased to {max_hp}!")
+        if map.runscompleted > 2:
+            if mission_choice == "1":
+                if not weapon.endswith("dagger"):
+                    print("You failed the mission by not only using daggers!")
+                    exit()  
+            elif mission_choice == "2":
+                if total_damage_taken > 100:
+                    print("You failed the mission by taking more than 100 damage!")
+                    exit()
+            elif mission_choice == "3":
+                if total_chests_opened > 12:
+                    print("You failed the mission by opening more than 12 chests!")
+                    exit()
+            elif mission_choice == "4":
+                if extra_slot != "Nothing":
+                    print("You failed the mission by using your extra slot!")
+                    exit()
+            elif mission_choice == "5":
+                if armor != "Nothing":
+                    print("You failed the mission by using armor!")
+                    exit()
