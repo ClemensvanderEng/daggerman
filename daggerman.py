@@ -616,17 +616,15 @@ if map.runscompleted > 0:
 if map.runscompleted > 2:
     print("Choose a mission: ")
     if "1" not in mission_done:
-        print("1 - Complete a run with only using daggers.")
+        print("1 - - complete a run without armor.")
     if "2" not in mission_done:
-        print("2 - Complete a run without taking more than 100 damage.")
+        print("2 - Complete a run without taking more than 240 damage.")
     if "3" not in mission_done:
-        print("3 - Complete a run without opening more than 12 chests.")
+        print("3 - Complete a run without opening more than 20 chests.")
     if "4" not in mission_done:
         print("4 - complete a run without using your extra slot.")
-    if "5" not in mission_done:
-        print("5 - complete a run without armor.")
     mission_choice = input()
-    while mission_choice not in ["1", "2", "3", "4", "5"] or mission_choice in mission_done:
+    while mission_choice not in ["1", "2", "3", "4"] or mission_choice in mission_done:
         print("Invalid choice. Please choose a valid mission.")
         mission_choice = input()
 
@@ -1109,22 +1107,18 @@ while True:
                     print(f"Your max HP increased to {max_hp}!")
         if map.runscompleted > 2:
             if mission_choice == "1":
-                if not weapon.endswith("dagger"):
-                    print("You failed the mission by not only using daggers!")
+                if armor != "Nothing":
+                    print("You failed the mission by using armor!")
                     exit()  
             elif mission_choice == "2":
-                if total_damage_taken > 100:
-                    print("You failed the mission by taking more than 100 damage!")
+                if total_damage_taken > 240:
+                    print("You failed the mission by taking more than 240 damage!")
                     exit()
             elif mission_choice == "3":
-                if total_chests_opened > 12:
-                    print("You failed the mission by opening more than 12 chests!")
+                if total_chests_opened > 20:
+                    print("You failed the mission by opening more than 20 chests!")
                     exit()
             elif mission_choice == "4":
                 if extra_slot != "Nothing":
                     print("You failed the mission by using your extra slot!")
-                    exit()
-            elif mission_choice == "5":
-                if armor != "Nothing":
-                    print("You failed the mission by using armor!")
                     exit()
