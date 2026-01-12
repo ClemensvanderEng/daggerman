@@ -613,7 +613,8 @@ def run_completed():
         if mc and mc not in existing:
             existing.append(mc)
         missions_str = ",".join(existing)
-        lines[line_num] = f"{username},{map.runscompleted+1},{Pclass},{missions_str},{shop_save}\n"
+        shop_str = ",".join(shop_save)
+        lines[line_num] = f"{username},{map.runscompleted+1},{Pclass},{missions_str},{shop_str}\n"
     with open("playerinfo.txt", "w", encoding="utf-8") as f:
         f.writelines(lines)
 
@@ -634,11 +635,11 @@ with open("playerinfo.txt", "r", encoding="utf-8") as f:
             map.runscompleted = int(parts[1])
             if map.runscompleted >= 1:
                 Pclass = parts[2]
-                if map.runscompleted >= 3:
-                    for n in range(3, map.runscompleted + 1):
+                if map.runscompleted >= 4:
+                    for n in range(3, map.runscompleted):
                         if parts[n] != "":
                             mission_done.append(parts[n])
-                    for m in range(map.runscompleted + 1, len(parts)):
+                    for m in range(map.runscompleted, len(parts)):
                         if parts[m] != "":
                             shop.append(parts[m])
                     print(mission_done)
@@ -717,7 +718,6 @@ if map.runscompleted > 2:
         print("Invalid choice. Please choose a valid shop item.")
         shop_choice = input()
     shop.append(shop_choice)
-
 
 if Pclass == "pyromancer" or Pclass == "warrior":
     class_attack = 1
