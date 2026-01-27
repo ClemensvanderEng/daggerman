@@ -21,6 +21,7 @@ class_attack = 0
 mission_done = []
 mission_choice = ""
 shop = []
+powerup = "0"
 
 total_damage_taken = 0  
 total_chests_opened = 0
