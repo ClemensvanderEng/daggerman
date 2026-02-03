@@ -16,7 +16,7 @@ extra_damage = 0
 armor = "Nothing"
 armor_defense = 0
 extra_defense = 0
-extra_slot = "Nothing"
+extra_slot = "magic missile magic scroll"
 adventurer_extra_slot = "Nothing"
 adventurer_extra_defense = 0
 spells_known = ["heal 2 magic scroll"]
@@ -101,7 +101,10 @@ def equip(itemType):
     while True:
         print("Do you want to equip this item? (y/n)")
         if itemType == "w":
-            print(f"Current weapon: {weapon} (Damage 1d{weapon_damage})")
+            if extra_damage == 2+map.lvl and weapon_damage == 2:
+                print(f"Current weapon: {weapon} (Damage 1d{damage_save})")
+            else:
+                print(f"Current weapon: {weapon} (Damage 1d{weapon_damage})")
         elif itemType == "a":
             print(f"Current armor: {armor} (Defense +{armor_defense})")
         elif itemType == "e":
@@ -660,7 +663,7 @@ with open("playerinfo.txt", "r", encoding="utf-8") as f:
         parts = line.strip().split(",")
         if parts[0] == username:
             map.runscompleted = int(parts[1])
-            if map.runscompleted >= 1:
+            if map.runscompleted >= 2:
                 Pclass = parts[2]
                 if map.runscompleted >= 3:
                     powerup = parts[3]
@@ -716,10 +719,10 @@ if map.runscompleted == 1:
     print()
     print("After you complete a run you will keep the class for your next runs.")
     print("What class do you want to be? (adventurer, roque, wizard, warrior, necromancer, pyromancer)")
-    Pclass = get_single_key()
+    Pclass = input()
     while Pclass not in ["adventurer", "roque", "wizard", "warrior", "necromancer", "pyromancer"]:
         print("Invalid class. Please choose from: adventurer, roque, wizard, warrior, necromancer, pyromancer")
-        Pclass = get_single_key()
+        Pclass = input()
 
 if map.runscompleted == 2:
     print("Choose a power up for your next run: ")
@@ -1031,7 +1034,6 @@ while True:
         elif extra_slot == "magic missile magic scroll":
             extra_damage_save = extra_damage
             damage_save = weapon_damage
-            save_lvl = map.lvl
             weapon_damage = 2
             extra_damage = map.lvl+2
             print(f"You do 1d2+{extra_damage} damage.")
@@ -1211,7 +1213,7 @@ while True:
                 heal = 0
         if map.wormplaceID[0] != -1:
             if wormHP > 0:
-                if abs(map.x[map.wormplaceID[0]]-map.x[k]) + abs(map.y[map.MplaceID[m]]-map.y[k]) <= 2:
+                if abs(map.x[map.wormplaceID[0]]-map.x[k]) + abs(map.y[map.wormplaceID[0]]-map.y[k]) <= 2:
                     print(f"The purple worm attacks you!")
                     monster_attack = roll(24) - (armor_defense + extra_defense)
                     if monster_attack <= 0:
