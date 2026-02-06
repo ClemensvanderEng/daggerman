@@ -41,3 +41,4 @@ w,swift dagger,24
 w,dash dagger,24
 e,power ring 4,4,4,damage and defende +4
 s,shaking dash magic scroll
+w,king's dagger,16

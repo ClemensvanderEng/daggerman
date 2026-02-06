@@ -117,10 +117,7 @@ def monster_defeat(monsterID):
         max_hp += 5
         hp = max_hp
         print(f"Your max HP increased to {max_hp}!")
-        print("You found a kings dagger! (Damage 1d16)")
-        if equip("w") == "y":
-            weapon = "king's dagger"
-            weapon_damage = 16
+        get_item(43)
     if map.id[map.MplaceID[monsterID]] == "Ω":
         print("You have defeated the Devil!")
         run_completed()
@@ -143,18 +140,6 @@ def monster_defeat(monsterID):
         max_hp += 5
         hp = max_hp
         print(f"Your max HP increased to {max_hp}!")
-
-def spell(spell_name): #moet nog deleted worden
-    global spells_known, extra_slot, extra_damage, extra_defense
-    if Pclass == "wizard":
-        if spell_name not in spells_known:
-            print(f"You learn the {spell_name[0:-13]} spell!")
-            spells_known.append(spell_name)
-    else:
-        if equip("e") == "y":
-            extra_slot = spell_name
-            extra_damage = 0
-            extra_defense = 0
 
 def get_item(row):
     global weapon, weapon_damage, armor, armor_defense, extra_slot, extra_damage, extra_defense
@@ -419,45 +404,35 @@ def attack(dx, dy):
                     if exp >= 25:
                         exp -= 25
                         print("You bought the power ring!")
-                        if equip("e") == "y":
-                            extra_slot = "power ring 1"
-                            extra_damage = 1
-                            extra_defense = 1
+                        get_item(9)
                     else:
                         print("You don't have enough EXP!")
                 elif choice == "2" and "2" in shop:
                     if exp >= 50:
                         exp -= 50
                         print("You bought the plate armor!")
-                        if equip("a") == "y":
-                            armor = "plate armor"
-                            armor_defense = 3
+                        get_item(18)
                     else:
                         print("You don't have enough EXP!")
                 elif choice == "3" and "3" in shop:
                     if exp >= 150:
                         exp -= 150
                         print("You bought the warriorssword!")
-                        if equip("w") == "y":
-                            weapon = "warriorssword"
-                            weapon_damage = 24
+                        get_item(24)
                     else:
                         print("You don't have enough EXP!")
                 elif choice == "4" and "4" in shop:
                     if exp >= 300:
                         exp -= 300
                         print("You bought the shaking dash magic scroll!")
-                        spell("shaking dash magic scroll")
+                        get_item(42)
                     else:
                         print("You don't have enough EXP!")
                 elif choice == "5" and "5" in shop:
                     if exp >= map.lvl**2*5:
                         exp -= map.lvl**2*5
                         print("You bought the health potion!")
-                        if equip("e") == "y":
-                            extra_slot = "health potion"
-                            extra_damage = 0
-                            extra_defense = 0
+                        get_item(11)
                     else:
                         print("You don't have enough EXP!")
             elif map.id[n] != "□" and map.id[n] != "x":
