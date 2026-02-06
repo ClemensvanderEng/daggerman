@@ -190,6 +190,7 @@ def get_item(row):
                     print(f"You learn the {spell_name[0:-13]} spell!")
                     spells_known.append(spell_name)
             else:
+                print(f"You found a {spell_name}!")
                 print(f"Current extra slot: {extra_slot}")
                 if equip() == "y":
                     extra_slot = spell_name
