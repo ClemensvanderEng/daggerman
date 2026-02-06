@@ -225,7 +225,10 @@ def attack(dx, dy):
                 treasure_roll = roll(50)
                 if map.lvl == 1:
                     if treasure_roll <= 10:
-                        get_item(0)
+                        if Pclass == "pyromancer":
+                            get_item(47)   
+                        else:
+                            get_item(0)
                     elif treasure_roll <= 20:
                         get_item(1)
                     elif treasure_roll <= 30:
@@ -291,6 +294,8 @@ def attack(dx, dy):
                         get_item(21)
                     elif treasure_roll <= 39:
                         get_item(11)
+                    elif treasure_roll <= 41:
+                        get_item(45)
                     elif treasure_roll <= 44:
                         get_item(17)
                     elif treasure_roll <= 47:
@@ -310,6 +315,8 @@ def attack(dx, dy):
                         get_item(28)
                     elif treasure_roll <= 33:
                         get_item(11)
+                    elif treasure_roll <= 35:
+                        get_item(46)
                     elif treasure_roll <= 40:
                         get_item(29)
                     elif treasure_roll <= 45:
@@ -324,9 +331,11 @@ def attack(dx, dy):
                             get_item(23)
                     elif treasure_roll <= 12:
                         get_item(30)
-                    elif treasure_roll <= 18:
+                    elif treasure_roll <= 15:
+                        get_item(44)
+                    elif treasure_roll <= 20:
                         get_item(31)
-                    elif treasure_roll <= 24:
+                    elif treasure_roll <= 25:
                         get_item(32)
                     elif treasure_roll <= 28:
                         get_item(29)
@@ -352,7 +361,12 @@ def attack(dx, dy):
                     elif treasure_roll <= 18:
                         get_item(39)
                     elif treasure_roll <= 24:
-                        get_item(40)
+                        if Pclass == "pyromancer":
+                            get_item(48)
+                        elif Pclass == "roque":
+                            get_item(49)
+                        else:
+                            get_item(40)
                     elif treasure_roll <= 28:
                         get_item(41)
                     elif treasure_roll <= 33:
@@ -1062,6 +1076,9 @@ while True:
                         move_object(0, -1)
                     elif roll_dir == 4:
                         move_object(0, 1)
+        if armor == "healer armor":
+            if hp < max_hp:
+                hp += 1
         if map.lvl >= 4:
             if hp < max_hp:
                     hp += 1
