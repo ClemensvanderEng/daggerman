@@ -625,7 +625,7 @@ if map.runscompleted > 2 and map.runscompleted < 7:
     if "1" not in mission_done:
         print("1 - complete a run without armor.")
     if "2" not in mission_done:
-        print("2 - Complete a run without taking more than 240 damage.")
+        print("2 - Complete a run without taking more than 200 damage.")
     if "3" not in mission_done:
         print("3 - Complete a run without opening more than 20 chests.")
     if "4" not in mission_done:
@@ -694,15 +694,13 @@ while True:
         print(f"Total damage done: {total_damage_done}")
         print(f"Total chests opened: {total_chests_opened}")
         if mission_choice == "1":
-            print("Mission: Complete a run with only using daggers.")
+            print("Mission: Complete a run without armor.")
         elif mission_choice == "2":
-            print("Mission: Complete a run without taking more than 100 damage.")
+            print("Mission: Complete a run without taking more than 200 damage.")
         elif mission_choice == "3": 
-            print("Mission: Complete a run without opening more than 12 chests.")
+            print("Mission: Complete a run without opening more than 20 chests.")
         elif mission_choice == "4":
             print("Mission: Complete a run without using your extra slot.")
-        elif mission_choice == "5":
-            print("Mission: Complete a run without armor.")
         if powerup == "1":
             print("Powerup: After defeating a monster you heal your level in hp.")
         elif powerup == "2":
@@ -1051,12 +1049,7 @@ while True:
                 continue
             if map.Mid[m] == "Ω":
                 devil_turn += 1
-                if devil_turn == 1:
-                    print("hell's fire is taking you from beneeth and you take 2 dm!")
-                    total_damage_taken += 2
-                    hp -= 2
-                    print (f"Your HP is now {hp}/{max_hp}.")
-                elif devil_turn == 3:
+                if devil_turn == 3:
                     devil_turn = 0
                     if abs(map.x[map.MplaceID[m]]-map.x[k]) + abs(map.y[map.MplaceID[m]]-map.y[k]) <= 3:
                         print("The devil attacks you with his fire breath and you take 5 dm!")
@@ -1192,8 +1185,8 @@ while True:
                         print("You failed the mission by using armor!")
                         exit()  
                 elif mission_choice == "2":
-                    if total_damage_taken > 240:
-                        print("You failed the mission by taking more than 240 damage!")
+                    if total_damage_taken > 200:
+                        print("You failed the mission by taking more than 200 damage!")
                         exit()
                 elif mission_choice == "3":
                     if total_chests_opened > 20:
