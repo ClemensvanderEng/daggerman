@@ -182,7 +182,10 @@ def get_item(row):
             extra_def = int(parts[3])
             effect = parts[4]
             print(f"You found a {extra_name}! ({effect})")
-            print(f"Current extra slot: {extra_slot}")
+            if Pclass == "wizard" and magic_missile_extra_damage == True:
+                print(f"current extra slot: {save}")
+            else:
+                print(f"Current extra slot: {extra_slot}")
             if equip() == "y":
                 magic_missile_extra_damage = False
                 extra_slot = extra_name
@@ -947,6 +950,8 @@ while True:
             if magic_missile_extra_damage == True:
                 extra_damage = extra_damage_save
                 magic_missile_extra_damage = False
+            else:
+                save = extra_slot
         elif extra_slot == "kill magic scroll":
             print("You can kill one creature with 12 hp or less left.")
             print("In wich direction do you want to try to kill a monster? (w/a/s/d)")
