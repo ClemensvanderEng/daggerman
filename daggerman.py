@@ -1,8 +1,6 @@
 import random
-from shlex import split
 import map
 import gen
-import os
 import sys
 import tty
 import termios
@@ -1120,16 +1118,12 @@ while True:
         if armor == "healer armor":
             if hp < max_hp:
                 hp += 1
-        if map.lvl >= 4:
-            if hp < max_hp:
-                    hp += 1
+        if map.lvl >= 4 or heal == 1:
+            hp += 1
         else:
-            if heal == 0:
-                heal = 1
-            else:
-                if hp < max_hp:
-                    hp += 1
-                heal = 0
+            heal = 1
+        if hp > max_hp:
+            hp = max_hp
         if map.wormplaceID[0] != -1:
             if wormHP > 0:
                 if abs(map.x[map.wormplaceID[0]]-map.x[k]) + abs(map.y[map.wormplaceID[0]]-map.y[k]) <= 2:
